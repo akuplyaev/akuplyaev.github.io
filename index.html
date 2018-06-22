@@ -3,6 +3,15 @@
 <head>
 <link rel="manifest" href="/manifest.json"></link>
 <script type="text/javascript" src="/ak-push.js"></script>
+<script>
+    try {
+        var akPush = new AKPush()
+        akPush.initSubscription() // Show push subscribe browser popup
+        // ...
+    } catch (e) {
+         alert("error")
+    }
+   </script>
 </head>
 <body>
 <h1>Test</h1>
