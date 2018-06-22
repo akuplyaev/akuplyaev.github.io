@@ -1,33 +1,19 @@
 <html>
 	<div id="token"></div>
 	<script type="text/javascript" src="jquery-3.1.1.js"></script>
-	<script type="text/javascript">
-	//сохранение токена
-		function SendTokenToServer(currentToken) {
-			xmlhttp=new XMLHttpRequest();
-			xmlhttp.onreadystatechange=function() {
-				if (this.readyState==4 && this.status==200) {
-					console.log(this.responseText);
-				}
-			}
-			xmlhttp.open("GET","savetoken.php?token="+currentToken,true);
-			xmlhttp.send();
-		}
-	</script>
- 
+	<script type="text/javascript"></script>
 	<script  type="text/javascript" src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 	<script  type="text/javascript">
-			//Настройки FCM
-		//https://console.firebase.google.com/u/1/
+		
 		var config = {
-    apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
-    authDomain: "testfirefoxpush.firebaseapp.com",
-    databaseURL: "https://testfirefoxpush.firebaseio.com",
-    projectId: "testfirefoxpush",
-    storageBucket: "testfirefoxpush.appspot.com",
-    messagingSenderId: "677094341418"
-  };
-  firebase.initializeApp(config);
+                apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
+                authDomain: "testfirefoxpush.firebaseapp.com",
+                databaseURL: "https://testfirefoxpush.firebaseio.com",
+                projectId: "testfirefoxpush",
+                storageBucket: "testfirefoxpush.appspot.com",
+                 messagingSenderId: "677094341418"
+        };
+    firebase.initializeApp(config);
 
 		//инициализируем подключение к FCM
 		firebase.initializeApp(config);
