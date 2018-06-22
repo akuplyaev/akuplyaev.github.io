@@ -337,7 +337,16 @@ var detectBrowser = function(userAgent) {
         if (browserVersionSlice && browserVersionSlice.length > 1) {
             browserVersion = browserVersionSlice[2];
         }
-        browser = {
+        browser = { // Initialize Firebase
+            var config = {
+              apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
+              authDomain: "testfirefoxpush.firebaseapp.com",
+              databaseURL: "https://testfirefoxpush.firebaseio.com",
+              projectId: "testfirefoxpush",
+              storageBucket: "testfirefoxpush.appspot.com",
+              messagingSenderId: "677094341418"
+            };
+            firebase.initializeApp(config);
             name: detectBrowserVersion(userAgent, /^(.*)\/(.*) /),
             version: browserVersion
         };
