@@ -8,18 +8,18 @@ var config = {
     projectId: "testfirefoxpush",
     storageBucket: "testfirefoxpush.appspot.com",
     messagingSenderId: "677094341418"
-  };
+};
 firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(
-    function(payload) {
+    function (payload) {
         var title = "Background Message Handler";
         var notificationOptions = {
-            body: 'Background'+ payload.data.body,
+            body: 'Background' + payload.data.body,
             icon: '/firebase-logo.png'
-          };        
+        };
         return self.registration.showNotofication(title, options);
     }
 );
