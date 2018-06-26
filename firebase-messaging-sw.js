@@ -15,8 +15,11 @@ const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(
     function(payload) {
-        const title = "Background Message Handler";
-        const options = {"body": "Background: " + payload.data.body};
+        var title = "Background Message Handler";
+        var notificationOptions = {
+            body: 'Background'+ payload.data.body,
+            icon: '/firebase-logo.png'
+          };        
         return self.registration.showNotofication(title, options);
     }
 );
