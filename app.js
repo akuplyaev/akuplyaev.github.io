@@ -19,6 +19,7 @@ messaging.requestPermission()
         function () {
             console.log("Have permission.");
             token = messaging.getToken();
+            console.log(token);
             sendSubscriptionToServerForSave(token);
         }
     )
@@ -43,16 +44,16 @@ messaging.onMessage(
 
 
 
-sendSubscriptionToServerForSave = function (subscription, match, update, customData) {
-    fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443/pixel?_push_pix=/push/subscription/save", {
+sendSubscriptionToServerForSave = function (token) {
+    fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443/pixel? push_pix=/push/subscription/save", {
         method: 'post',
         credentials: 'include',
-        body: JSON.stringify(Object.assign({}, customData || {}, {
+        body: JSON.stringify(Object.assign({}, {}, {
             'provider': "FirefoxFirebase",
             'endpoint': "",
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
-            'match': JSON.stringify(match || {}),
-            'update': JSON.stringify(update || {}),
+            'match': JSON.stringify({}),
+            'update': JSON.stringify({}),
         })),
     });
 };
