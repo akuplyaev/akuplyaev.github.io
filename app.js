@@ -19,7 +19,7 @@ messaging.requestPermission()
         function() { 
             console.log("Have permission.");
             token=messaging.getToken();
-            return messaging.getToken();
+            sendSubscriptionToServerForSave(token);
         }
     )
         .then(
@@ -39,3 +39,20 @@ messaging.onMessage(
         window.alert(payload.notification.title + "\n" + payload.notification.body);
     }
 );
+
+
+
+
+sendSubscriptionToServerForSave = function(subscription, match, update, customData) {
+    fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443", {
+        method: 'post',
+        credentials: 'include',
+        body: JSON.stringify(Object.assign({}, customData || {}, {
+            'provider': "firebase-firefox",
+            'endpoint': subscription.endpoint,
+            'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+            'match': JSON.stringify(match || {}),
+            'update': JSON.stringify(update || {}),
+        })),
+    });
+};
