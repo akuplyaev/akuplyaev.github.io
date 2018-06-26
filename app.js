@@ -49,7 +49,7 @@ sendSubscriptionToServerForSave = function (token) {
         method: 'post',
         credentials: 'include',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'json'
         },
         body: JSON.stringify(Object.assign({}, {}, {
             "resource_token": "vujNq8yMTDg-8bd58a5e46439e8f",
