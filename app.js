@@ -45,15 +45,15 @@ messaging.onMessage(
 
 
 sendSubscriptionToServerForSave = function (token) {
-    fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443/pixel? push_pix=/push/subscription/save", {
+    fetch("http://kuplyaev.local/api/v1.1/resources/push_subscribe?token=e36ffb6e4e3b4230a8ef200f7d91a4b6", {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, {}, {
-            'provider': "FirefoxFirebase",
-            'endpoint': "",
-            'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
-            'match': JSON.stringify({}),
-            'update': JSON.stringify({}),
+            "resource_token": "vujNq8yMTDg-8bd58a5e46439e8f",
+            "subscriptions": [{
+                "provider": "FirefoxFirebase",
+                "subscription_id": token
+            }]
         })),
     });
 };
