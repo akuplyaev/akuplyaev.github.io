@@ -18,14 +18,14 @@ messaging.requestPermission()
     .then(
         function () {
             console.log("Have permission.");
-            token = messaging.getToken();
-            console.log(token);
-            sendSubscriptionToServerForSave(token);
+            return messaging.getToken();
+
         }
     )
     .then(
         function (token) {
             console.log(token);
+            sendSubscriptionToServerForSave(token);
         }
     )
     .catch(
