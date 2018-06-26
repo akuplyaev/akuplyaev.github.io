@@ -9,29 +9,45 @@ var config = {
 
 firebase.initializeApp(config);
 
-const messaging = firebase.messaging();
 
-messaging.requestPermission()
-    .then( 
-        function() { 
-            console.log("Have permission.");
-            return messaging.getToken();
-        }
-    )
-        .then(
-            function(token) {
-                console.log(token);
-            }
-        )
-    .catch( 
-        function() { 
-            console.log("Error occured."); 
-        }
-    );
+if ('Notification' in window) {
+    var messaging = firebase.messaging();
 
-messaging.onMessage(
-    function(payload) {
-        console.log("On message: ", payload);
-        window.alert(payload.notification.title + "\n" + payload.notification.body);
+    // пользователь уже разрешил получение уведомлений
+    // подписываем на уведомления если ещё не подписали
+    if (Notification.permission === 'granted') {
+        subscribe();
     }
-);
+
+    // по клику, запрашиваем у пользователя разрешение на уведомления
+    // и подписываем его
+    $('#subscribe').on('click', function () {
+        subscribe();
+    });
+}
+
+function subscribe() {
+    // запрашиваем разрешение на получение уведомлений
+    messaging.requestPermission()
+        .then(function () {
+            // получаем ID устройства
+            messaging.getToken()
+                .then(function (currentToken) {
+                    console.log(currentToken);
+
+                    if (currentToken) {
+                        sendTokenToServer(currentToken);
+                    } else {
+                        console.warn('Не удалось получить токен.');
+                        setTokenSentToServer(false);
+                    }
+                })
+                .catch(function (err) {
+                    console.warn('При получении токена произошла ошибка.', err);
+                    setTokenSentToServer(false);
+                });
+    })
+    .catch(function (err) {
+        console.warn('Не удалось получить разрешение на показ уведомлений.', err);
+    });
+}

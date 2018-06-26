@@ -13,7 +13,6 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
-// ÐÐµ Ð¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾, Ð´Ð»Ñ Ð¾ÑÐ¾Ð±Ñ‹Ñ… ÑÐ»ÑƒÑ‡Ð°ÐµÐ²
 messaging.setBackgroundMessageHandler(
     function(payload) {
         const title = "Background Message Handler";
