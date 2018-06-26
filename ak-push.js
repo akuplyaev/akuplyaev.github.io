@@ -10,7 +10,7 @@
 
 var AKPush = function(akPushConfig) {
     this.akPushConfig = akPushConfig || {};
-    this.akPushConfig.ResourceToken = this.akPushConfig.ResourceToken || 'vujNq8yMTDg-8bd58a5e46439e8f'
+    this.akPushConfig.ResourceToken = this.akPushConfig.ResourceToken || 'vujNq8yMTDg-8bd58a5e46439e8f';
     this.akPushConfig.ServerHost = this.akPushConfig.ServerHost || 'cookiesaver.kuplyaev.wip.altkraft.com:27443';
     this.akPushConfig.SafariWebsitePushID = this.akPushConfig.SafariWebsitePushID || '';
     this.akPushConfig.ServerApplePushAPI = this.akPushConfig.ServerApplePushAPI || 'https://kuplyaev.local/api/v1.1/ap';
