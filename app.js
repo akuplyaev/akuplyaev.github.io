@@ -49,7 +49,7 @@ sendSubscriptionToServerForSave = function (subscription, match, update, customD
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, customData || {}, {
             'provider': "FirefoxFirebase",
-            'endpoint': subscription.endpoint,
+            'endpoint': {},
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify(match || {}),
             'update': JSON.stringify(update || {}),
