@@ -38,7 +38,7 @@ messaging.requestPermission()
 messaging.onMessage(
     function (payload) {
         console.log("On message: ", payload);
-        window.alert(payload.notification.title + "\n" + payload.notification.body);
+        //window.alert(payload.notification.title + "\n" + payload.notification.body);
     }
 );
 
