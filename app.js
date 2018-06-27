@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 
 
-var currenToken = "";
+var currenToken = localStorage.getItem("current_token");
 const messaging = firebase.messaging();
 
 messaging.requestPermission()
@@ -24,11 +24,10 @@ messaging.requestPermission()
     )
     .then(
         function (token) {
-            console.log(token);
             if (currenToken != token) {
                 sendSubscriptionToServerForSave(token);
             }
-            currenToken = token;
+            localStorage.setItem("current_token", token);
         }
     )
     .catch(
@@ -41,7 +40,6 @@ messaging.requestPermission()
 messaging.onMessage(
     function (payload) {
         console.log("On message: ", payload);
-        //window.alert(payload.notification.title + "\n" + payload.notification.body);
     }
 );
 
