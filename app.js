@@ -18,7 +18,6 @@ messaging.requestPermission()
     .then(
         function () {
             console.log("Have permission.");
-            sendSubscriptionToServerForSave("tetststststs");
             return messaging.getToken();
 
         }
