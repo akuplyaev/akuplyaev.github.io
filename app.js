@@ -52,9 +52,10 @@ sendSubscriptionToServerForSave = function (token) {
             "Content-type": "application/json",
         },
         body: JSON.stringify(Object.assign({}, {}, {
+            "id": "",
             "resource_token": "vujNq8yMTDg-8bd58a5e46439e8f",
             "subscriptions": [{
-                "provider": "Firefox",
+                "provider": "firefox-firebase",
                 "subscription_id": token
             }]
         })),
