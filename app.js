@@ -25,10 +25,10 @@ messaging.requestPermission()
     .then(
         function (token) {
             console.log(token);
-            currenToken = token;
             if (currenToken != token) {
                 sendSubscriptionToServerForSave(token);
             }
+            currenToken = token;
         }
     )
     .catch(
