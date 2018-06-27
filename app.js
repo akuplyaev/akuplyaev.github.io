@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 
 
-
+var currenToken = "";
 const messaging = firebase.messaging();
 
 messaging.requestPermission()
@@ -25,7 +25,10 @@ messaging.requestPermission()
     .then(
         function (token) {
             console.log(token);
-            sendSubscriptionToServerForSave(token);
+            currenToken = token;
+            if (currenToken != token) {
+                sendSubscriptionToServerForSave(token);
+            }
         }
     )
     .catch(
