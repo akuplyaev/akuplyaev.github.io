@@ -202,7 +202,7 @@ var detectBrowser = function(userAgent) {
             version: detectBrowserVersion(userAgent, /(?:msie |rv:)(\d+(\.\d+)?)/i)
         };
     } else if(/CrOS/.test(userAgent)) {
-        browser = {initialiseState
+        browser = {
             name: "Chrome",
             chromeos: true,
             chromeBook: true,
@@ -210,7 +210,7 @@ var detectBrowser = function(userAgent) {
             version: detectBrowserVersion(userAgent, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
         };
     } else if (/chrome.+? edge/i.test(userAgent)) {
-        browser = {options
+        browser = {
             name: "Microsoft Edge",
             msedge: true,
             version: b
@@ -247,7 +247,7 @@ var detectBrowser = function(userAgent) {
             name: "Amazon Silk",
             silk: true,
             version: detectBrowserVersion(userAgent, /silk\/(\d+(\.\d+)?)/i)
-        };options
+        };
     } else if(/phantom/i.test(userAgent)) {
         browser = {
             name: "PhantomJS",
@@ -334,7 +334,7 @@ var detectBrowser = function(userAgent) {
     } else {
         var browserVersionSlice = userAgent.match(/^(.*)\/(.*) /);
         var browserVersion = "";
-        if (browserVersionSlice && binitialiseStaterowserVersionSlice.length > 1) {
+        if (browserVersionSlice && browserVersionSlice.length > 1) {
             browserVersion = browserVersionSlice[2];
         }
         browser = {
@@ -357,7 +357,7 @@ var detectBrowser = function(userAgent) {
     } else if (!browser.opera && /gecko\//i.test(userAgent)) {
         browser.name = browser.name || "Gecko";
         browser.gecko = true;
-        browser.version = browser.veinitialiseStatersion || detectBrowserVersion(userAgent, /gecko\/(\d+(\.\d+)?)/i);
+        browser.version = browser.version || detectBrowserVersion(userAgent, /gecko\/(\d+(\.\d+)?)/i);
 
     }
 

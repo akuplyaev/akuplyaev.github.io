@@ -15,11 +15,40 @@ const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(
     function (payload) {
-        var title = "Background Message Handler";
+        self.addEventListener('notificationclick', function (event) {
+            // console.log('User has clicked in the notification');
+            // console.log(event.notification.tag);
+            if (event.notification.tag === 'user_visible_auto_notification' || !event.notification.data) {
+                return;
+            }
+            event.notification.close();
+            event.waitUntil(
+                clients.matchAll({
+                    type: 'window'
+                })
+                .then(function (clientList) {
+                    var provider = ""
+                    if ('userAgent' in navigator) {
+                        var browser = detectBrowser(navigator.userAgent);
+                        if (browser && browser.name) {
+                            provider = browser.name;
+                        }
+                    }
+                    var url = event.notification.data;
+                    url = url + "?provider=" + provider;
+                    if (clients.openWindow) {
+                        return clients.openWindow(url);
+                    }
+                })
+            );
+
+        });
+        var notificationTitle = payload.data.title;
         var notificationOptions = {
-            body: 'Background' + payload.data.body,
-            icon: '/firebase-logo.png'
+            body: payload.data.body,
+            icon: payload.data.icon
         };
+
         return self.registration.showNotofication(title, options);
     }
 );
