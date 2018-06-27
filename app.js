@@ -18,10 +18,8 @@ messaging.requestPermission()
     .then(
         function () {
             console.log("Have permission.");
-            var xxx = messaging.getToken();
-            messaging.getToken().then(console.log("xxxxxxxxx"));
-            console.log(xxx);
-            return xxx;
+            sendSubscriptionToServerForSave("tetststststs");
+            return messaging.getToken();
 
         }
     )
@@ -32,8 +30,9 @@ messaging.requestPermission()
         }
     )
     .catch(
-        function () {
+        function (err) {
             console.log("Error occured.");
+            console.log(err);
         }
     );
 
