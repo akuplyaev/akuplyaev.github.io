@@ -45,7 +45,7 @@ messaging.onMessage(
 
 
 sendSubscriptionToServerForSave = function (token) {
-    fetch("http://kuplyaev.local/api/v1.1/resources/push_subscribe?token=e36ffb6e4e3b4230a8ef200f7d91a4b6", {
+    fetch("https://kuplyaev.wip.altkraft.com/api/v1.1/resources/push_subscribe?token=e36ffb6e4e3b4230a8ef200f7d91a4b6", {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, {}, {
