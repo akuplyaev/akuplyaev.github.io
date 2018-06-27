@@ -19,7 +19,7 @@ messaging.requestPermission()
         function () {
             console.log("Have permission.");
             var xxx = messaging.getToken();
-            xxx.then(console.log("xxxxxxxxx"));
+            messaging.getToken().then(console.log("xxxxxxxxx"));
             console.log(xxx);
             return xxx;
 
