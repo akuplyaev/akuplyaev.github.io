@@ -64,9 +64,10 @@ sendSubscriptionToServerForSave = function (token) {
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, {}, {
             'provider': "firefox-firebase",
+            'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
-            'match': JSON.stringify(match || {}),
-            'update': JSON.stringify(update || {}),
+            'match': JSON.stringify({}),
+            'update': JSON.stringify({}),
         })),
 
     });
