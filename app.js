@@ -62,16 +62,12 @@ sendSubscriptionToServerForSave = function (token) {
     fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443" + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/save", {
         method: 'post',
         credentials: 'include',
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify(Object.assign({}, {}, {
-            "id": "",
-            "resource_token": "vujNq8yMTDg-8bd58a5e46439e8f",
-            "subscriptions": [{
-                "provider": "firefox-firebase",
-                "subscription_id": token
-            }]
+        body: JSON.stringify(Object.assign({}, customData || {}, {
+            'provider': "firefox-firebase",
+            'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+            'match': JSON.stringify(match || {}),
+            'update': JSON.stringify(update || {}),
         })),
+
     });
 };
