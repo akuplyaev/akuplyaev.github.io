@@ -28,22 +28,30 @@ messaging.setBackgroundMessageHandler(
 
 // обработка клика на уведомлении
 self.addEventListener('notificationclick', function (event) {
+    // console.log('User has clicked in the notification');
+    // console.log(event.notification.tag);
+    if (event.notification.tag === 'user_visible_auto_notification' || !event.notification.data) {
+        return;
+    }
     event.notification.close();
-    // This looks to see if the current is already open and
-    // focuses if it is
     event.waitUntil(
         clients.matchAll({
-            type: "window"
+            type: 'window'
         })
         .then(function (clientList) {
-            for (var i = 0; i < clientList.length; i++) {
-                var client = clientList[i];
-                if (client.url == '/' && 'focus' in client)
-                    return client.focus();
+            var provider = ""
+            if ('userAgent' in navigator) {
+                var browser = detectBrowser(navigator.userAgent);
+                if (browser && browser.name) {
+                    provider = browser.name;
+                }
             }
+            var url = event.notification.data;
+            url = url + "?provider=" + provider;
             if (clients.openWindow) {
-                return clients.openWindow(payload.data.action);
+                return clients.openWindow(url);
             }
         })
     );
+
 });
