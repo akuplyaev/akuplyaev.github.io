@@ -40,6 +40,18 @@ messaging.requestPermission()
 messaging.onMessage(
     function (payload) {
         console.log("On message: ", payload);
+        var options = {
+            body: payload.data.message + " " + payload.data.key,
+            icon: 'firebase/firebase-logo.png',
+            "click_action": payload.data.action
+        };
+        var n = new Notification('add.js ' + payload.data.title, options);
+
+        n.onclick = function (event) {
+            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+            window.open(payload.data.action, '_blank');
+        };
+
     }
 );
 
