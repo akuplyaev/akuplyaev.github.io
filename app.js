@@ -45,10 +45,10 @@ messaging.onMessage(
             icon: 'firebase/firebase-logo.png',
             "click_action": payload.data.action
         };
-        var n = new Notification('add.js ' + payload.data.title, options);
+        var n = new Notification('app.js ' + payload.data.title, options);
 
         n.onclick = function (event) {
-            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+            event.preventDefault();
             window.open(payload.data.action, '_blank');
         };
 
