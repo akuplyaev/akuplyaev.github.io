@@ -55,3 +55,15 @@ self.addEventListener('notificationclick', function (event) {
     );
 
 });
+
+
+
+
+
+var getAKServerLink = function () {
+    return "https://" + "cookiesaver.kuplyaev.wip.altkraft.com:27443";
+}
+
+var getAKServerPushContentGetSubscriptionLink = function () {
+    return getAKServerLink() + "/push" + "/content" + "/get";
+}
