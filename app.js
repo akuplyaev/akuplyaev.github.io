@@ -59,7 +59,7 @@ messaging.onMessage(
 
 
 sendSubscriptionToServerForSave = function (token) {
-    fetch("https://kuplyaev.wip.altkraft.com/api/v1.1/resources/push_subscribe?token=e36ffb6e4e3b4230a8ef200f7d91a4b6", {
+    fetch("https://" + "cookiesaver.kuplyaev.wip.altkraft.com:27443/pixel?_push_pix=/push/subscription/save", {
         method: 'post',
         credentials: 'include',
         headers: {
