@@ -24,7 +24,15 @@
 <body>
     <h1>Test push</h1>
 
-    <script src="app.js"></script>
+    <script>
+        try {
+            var akPush = new AKPush()
+            akPush.initSubscription() // Show push subscribe browser popup
+            //     // ...
+        } catch (e) {
+            // ...
+        }
+    </script>
 
 </body>
 

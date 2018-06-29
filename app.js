@@ -45,13 +45,6 @@ messaging.onMessage(
             icon: 'firebase/firebase-logo.png',
             "click_action": payload.data.action
         };
-        var n = new Notification('app.js ' + payload.data.title, options);
-
-        n.onclick = function (event) {
-            event.preventDefault();
-            window.open(payload.data.action, '_blank');
-        };
-
     }
 );
 
@@ -64,7 +57,7 @@ sendSubscriptionToServerForSave = function (token) {
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, {}, {
             'provider': "firefox-firebase",
-            'endpoint': token,
+            'endpoint': "",
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify({}),
             'update': JSON.stringify({}),
