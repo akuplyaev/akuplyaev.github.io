@@ -2,16 +2,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
-    <script>
-        try {
-            var akPush = new AKPush()
-            akPush.initSubscription() // Show push subscribe browser popup
-            //     // ...
-        } catch (e) {
-            // ...
-        }
-    </script>
     <style>
         .hide {
             display: none;
@@ -28,6 +18,13 @@
         }
     </style>
 </head>
+
+<script>
+    try {
+        var akPush = new AKPush()
+        akPush.initSubscription() // Show push subscribe browser popup   
+    } catch (e) {}
+</script>
 
 <body>
     <h1>Test push</h1>
