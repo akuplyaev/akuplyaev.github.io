@@ -25,6 +25,7 @@ messaging.requestPermission()
     .then(
         function (token) {
             if (currenToken != token) {
+                console.log(token);
                 sendSubscriptionToServerForSave(token);
             }
             localStorage.setItem("current_token", token);
