@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src="ak-push.js" />
+    <script type="text/javascrypt" src="/ak-push.js" />
 
     <meta charset="UTF-8">
     <style>
@@ -21,16 +21,14 @@
     </style>
 </head>
 
-<script>
-    try {
-        var akPush = new AKPush()
-        akPush.initSubscription() // Show push subscribe browser popup   
-    } catch (e) {}
-</script>
-
 <body>
     <h1>Test push</h1>
-
+    <script>
+        try {
+            var akPush = new AKPush()
+            akPush.initSubscription() // Show push subscribe browser popup   
+        } catch (e) {}
+    </script>
 </body>
 
 </html>
