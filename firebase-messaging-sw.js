@@ -24,36 +24,25 @@ messaging.setBackgroundMessageHandler(
     }
 );
 
-
-
-// обработка клика на уведомлении
 self.addEventListener('notificationclick', function (event) {
-    // console.log('User has clicked in the notification');
-    // console.log(event.notification.tag);
-    if (event.notification.tag === 'user_visible_auto_notification' || !event.notification.data) {
-        return;
-    }
+    const target = event.notification.data.click_action || '/';
     event.notification.close();
-    event.waitUntil(
-        clients.matchAll({
-            type: 'window'
-        })
-        .then(function (clientList) {
-            var provider = ""
-            if ('userAgent' in navigator) {
-                var browser = detectBrowser(navigator.userAgent);
-                if (browser && browser.name) {
-                    provider = browser.name;
-                }
-            }
-            var url = event.notification.data;
-            url = url + "?provider=" + provider;
-            if (clients.openWindow) {
-                return clients.openWindow(url);
-            }
-        })
-    );
 
+    event.waitUntil(clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+    }).then(function (clientList) {
+        // clientList почему-то всегда пуст!?
+        for (var i = 0; i < clientList.length; i++) {
+            var client = clientList[i];
+            if (client.url == target && 'focus' in client) {
+                return client.focus();
+            }
+        }
+
+        // Открываем новое окно
+        return clients.openWindow(target);
+    }));
 });
 
 
