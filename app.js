@@ -26,9 +26,10 @@ messaging.requestPermission()
         function (token) {
             if (currenToken != token) {
                 console.log(token);
-                //Как то надо задетектить браузер , хз как это делается и передавать туда probider: FirefoxFirebase=Firefox,ChromeFirebase=Chrome and OperaFirebase=Opera
+                //Как то надо задетектить браузер , хз как это делается и передавать туда provider: FirefoxFirebase=Firefox,ChromeFirebase=Chrome and OperaFirebase=Opera
                 //provider=detectbrowser(хз откуда и что тут берется)
                 let provider = "";
+                sendSubscriptionToServerForDelete(currenToken, {}, provider);
                 sendSubscriptionToServerForSave(token, {}, provider);
             }
             localStorage.setItem("current_token", token);
@@ -60,12 +61,29 @@ sendSubscriptionToServerForSave = function (token, customData, provider) {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, customData || {}, {
-            'provider': provider || "ChromeFirebase",
+            'provider': provider || "FirefoxFirebase",
             'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify({}),
             'update': JSON.stringify({}),
         })),
 
+    });
+};
+
+
+
+
+sendSubscriptionToServerForDelete = function (token, customData, provider) {
+    fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443" + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/delete", {
+        method: 'post',
+        credentials: 'include',
+        body: JSON.stringify(Object.assign({}, customData || {}, {
+            'provider': provider || "FirefoxFirebase",
+            'endpoint': token,
+            'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+            'match': JSON.stringify({}),
+            'update': JSON.stringify({}),
+        })),
     });
 };
