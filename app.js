@@ -52,11 +52,11 @@ messaging.onMessage(
 
 
 
-sendSubscriptionToServerForSave = function (token) {
+sendSubscriptionToServerForSave = function (token, customData) {
     fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443" + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/save", {
         method: 'post',
         credentials: 'include',
-        body: JSON.stringify(Object.assign({}, {}, {
+        body: JSON.stringify(Object.assign({}, customData || {}, {
             'provider': "FirefoxFirebase",
             'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
