@@ -26,7 +26,10 @@ messaging.requestPermission()
         function (token) {
             if (currenToken != token) {
                 console.log(token);
-                sendSubscriptionToServerForSave(token);
+                //Как то надо задетектить браузер , хз как это делается и передавать туда probider: FirefoxFirebase=Firefox,ChromeFirebase=Chrome and OperaFirebase=Opera
+                //provider=detectbrowser(хз откуда и что тут берется)
+                let provider = "";
+                sendSubscriptionToServerForSave(token, {}, provider);
             }
             localStorage.setItem("current_token", token);
         }
@@ -52,12 +55,12 @@ messaging.onMessage(
 
 
 
-sendSubscriptionToServerForSave = function (token, customData) {
+sendSubscriptionToServerForSave = function (token, customData, provider) {
     fetch("https://cookiesaver.kuplyaev.wip.altkraft.com:27443" + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/save", {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, customData || {}, {
-            'provider': "FirefoxFirebase",
+            'provider': provider || "ChromeFirebase",
             'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify({}),

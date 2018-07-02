@@ -33,15 +33,12 @@ self.addEventListener('notificationclick', function (event) {
         type: 'window',
         includeUncontrolled: true
     }).then(function (clientList) {
-        // clientList почему-то всегда пуст!?
         for (var i = 0; i < clientList.length; i++) {
             var client = clientList[i];
             if (client.url == target && 'focus' in client) {
                 return client.focus();
             }
         }
-
-        // Открываем новое окно
         return clients.openWindow(target);
     }));
 });
