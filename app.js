@@ -14,32 +14,44 @@ firebase.initializeApp(config);
 var currenToken = localStorage.getItem("current_token");
 const messaging = firebase.messaging();
 
-messaging.requestPermission()
-    .then(
-        function () {
-            console.log("Have permission.");
-            return messaging.getToken();
 
-        }
-    )
-    .then(
-        function (token) {
-            if (currenToken != token) {
-                console.log(token);
-                //Как то надо задетектить браузер , хз как это делается и передавать туда provider: FirefoxFirebase=Firefox,ChromeFirebase=Chrome and OperaFirebase=Opera
-                //provider=detectbrowser(хз откуда и что тут берется)
-                let provider = "";
-                sendSubscriptionToServerForSave(token, {}, provider);
-            }
-            localStorage.setItem("current_token", token);
-        }
-    )
-    .catch(
-        function (err) {
-            console.log("Error occured.");
-            console.log(err);
-        }
-    );
+
+if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        .then((registration) => {
+            messaging.useServiceWorker(registration);
+
+            messaging.requestPermission()
+                .then(
+                    function () {
+                        console.log("Have permission.");
+                        return messaging.getToken();
+
+                    }
+                )
+                .then(
+                    function (token) {
+                        if (currenToken != token) {
+                            console.log(token);
+                            //Как то надо задетектить браузер , хз как это делается и передавать туда provider: FirefoxFirebase=Firefox,ChromeFirebase=Chrome and OperaFirebase=Opera
+                            //provider=detectbrowser(хз откуда и что тут берется)
+                            let provider = "";
+                            sendSubscriptionToServerForSave(token, {}, provider);
+                        }
+                        localStorage.setItem("current_token", token);
+                    }
+                )
+                .catch(
+                    function (err) {
+                        console.log("Error occured.");
+                        console.log(err);
+                    }
+                );
+        });
+
+}
+
 
 messaging.onMessage(
     function (payload) {
