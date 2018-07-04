@@ -46,7 +46,7 @@ messaging.onMessage(
         console.log("On message: ", payload);
         var options = {
             body: payload.data.message + " " + payload.data.key,
-            icon: 'firebase/firebase-logo.png',
+            icon: 'https://www.kickinghorseford.com/wp-content/uploads/sites/337/2016/09/ford-icon.png',
             "click_action": payload.data.action
         };
     }
