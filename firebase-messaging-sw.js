@@ -20,7 +20,8 @@ messaging.setBackgroundMessageHandler(
         var title = payload.data.title;
         var notificationOptions = {
             body: payload.data.body,
-            icon: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png'
+            icon: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png',
+            image: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png'
         };
         return self.registration.showNotification(title, options);
     }
