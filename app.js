@@ -58,8 +58,8 @@ messaging.onMessage(
         console.log("On message app: ", payload);
         var options = {
             body: payload.data.message + " " + payload.data.key,
-            icon: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png',
-            "click_action": payload.data.action
+            icon: payload.data.icon,
+            click_action: payload.data.action
         };
     }
 );

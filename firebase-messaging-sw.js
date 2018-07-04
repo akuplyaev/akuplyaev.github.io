@@ -19,9 +19,9 @@ messaging.setBackgroundMessageHandler(
         console.log("On message: ", payload);
         var title = payload.data.title;
         var notificationOptions = {
-            body: payload.data.body,
-            icon: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png',
-            image: 'https://cdn.icon-icons.com/icons2/691/PNG/512/google_firebase_icon-icons.com_61475.png'
+            body: payload.data.message + " " + payload.data.key,
+            icon: payload.data.icon,
+            click_action: payload.data.action
         };
         return self.registration.showNotification(title, options);
     }
