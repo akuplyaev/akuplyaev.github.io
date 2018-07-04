@@ -16,10 +16,10 @@ const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(
     function (payload) {
-        var title = "Background Message Handler";
+        var title = payload.data.title;
         var notificationOptions = {
-            body: 'Background' + payload.data.body,
-            icon: '/firebase-logo.png'
+            body: payload.data.body,
+            icon: 'https://www.kickinghorseford.com/wp-content/uploads/sites/337/2016/09/ford-icon.png'
         };
         return self.registration.showNotofication(title, options);
     }
@@ -42,15 +42,3 @@ self.addEventListener('notificationclick', function (event) {
         return clients.openWindow(target);
     }));
 });
-
-
-
-
-
-var getAKServerLink = function () {
-    return "https://" + "cookiesaver.kuplyaev.wip.altkraft.com:27443";
-};
-
-var getAKServerPushContentGetSubscriptionLink = function () {
-    return getAKServerLink() + "/push" + "/content" + "/get";
-};
