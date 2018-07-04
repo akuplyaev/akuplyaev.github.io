@@ -15,6 +15,7 @@ var AKPush = function (akPushConfig) {
     this.akPushConfig.ServerApplePushAPI = this.akPushConfig.ServerApplePushAPI || 'https://kuplyaev.local/api/v1.1/ap';
     this.akPushConfig.ServiceWorkerPath = this.akPushConfig.ServiceWorkerPath || '/service-worker.js';
     this.akPushConfig.IsTest = this.akPushConfig.IsTest || "false";
+    this.akPushConfig.IsFireBase = this.akPushConfig.IsFireBase || "true";
 
     this.Provider = "";
 
