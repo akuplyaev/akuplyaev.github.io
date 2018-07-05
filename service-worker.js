@@ -1,16 +1,46 @@
-self.addEventListener('install', function(event) {
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+
+
+var config = {
+    apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
+    authDomain: "testfirefoxpush.firebaseapp.com",
+    databaseURL: "https://testfirefoxpush.firebaseio.com",
+    projectId: "testfirefoxpush",
+    storageBucket: "testfirefoxpush.appspot.com",
+    messagingSenderId: "677094341418"
+};
+firebase.initializeApp(config);
+
+const messaging = firebase.messaging();
+
+messaging.setBackgroundMessageHandler(
+    function (payload) {
+        console.log("On message: ", payload);
+        var title = payload.data.title;
+        var notificationOptions = {
+            body: payload.data.message + " " + payload.data.key,
+            icon: payload.data.icon,
+            click_action: payload.data.action
+        };
+        return self.registration.showNotification(title, options);
+    }
+);
+
+
+self.addEventListener('install', function (event) {
     console.log("Install service worker script");
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
     console.log("Fetch service worker script");
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
     // console.log('Push-notification has been received');
     // console.log(event);
     event.waitUntil(
-        self.registration.pushManager.getSubscription().then(function(subscription) {
+        self.registration.pushManager.getSubscription().then(function (subscription) {
             var provider = ""
             if ('userAgent' in navigator) {
                 var browser = detectBrowser(navigator.userAgent);
@@ -19,51 +49,51 @@ self.addEventListener('push', function(event) {
                 }
             }
             return fetch(getAKServerPushContentGetSubscriptionLink(), {
-                method: 'post',
-                credentials: 'include',
-                body: JSON.stringify({
-                    'provider': provider,
-                    'endpoint': subscription.endpoint,
-                    'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+                    method: 'post',
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        'provider': provider,
+                        'endpoint': subscription.endpoint,
+                        'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+                    })
                 })
-            })
-            .then(function(response) {
-                if (response.status !== 200) {
-                    console.error('Error on getting push content');
-                    console.error(response.status);
-                    throw new Error();
-                }
-
-                return response.json().then(function(data) {
-                    if (data.error) {
-                        console.error('The server returns an error');
-                        console.error(data.error);
+                .then(function (response) {
+                    if (response.status !== 200) {
+                        console.error('Error on getting push content');
+                        console.error(response.status);
                         throw new Error();
                     }
 
-                    var title = data.data.title;
-                    var body = data.data.body;
-                    var icon = data.data.icon;
-                    var tag = data.data.tag;
-                    var data = data.data.data;
+                    return response.json().then(function (data) {
+                        if (data.error) {
+                            console.error('The server returns an error');
+                            console.error(data.error);
+                            throw new Error();
+                        }
 
-                    return self.registration.showNotification(title, {
-                        body: body,
-                        icon: icon,
-                        tag: tag,
-                        data: data
+                        var title = data.data.title;
+                        var body = data.data.body;
+                        var icon = data.data.icon;
+                        var tag = data.data.tag;
+                        var data = data.data.data;
+
+                        return self.registration.showNotification(title, {
+                            body: body,
+                            icon: icon,
+                            tag: tag,
+                            data: data
+                        });
                     });
-                });
-            })
-            .catch(function(err) {
-                console.error('Unable to receive data from server');
-                console.error(err);
-            })
+                })
+                .catch(function (err) {
+                    console.error('Unable to receive data from server');
+                    console.error(err);
+                })
         })
     );
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
     // console.log('User has clicked in the notification');
     // console.log(event.notification.tag);
     if (event.notification.tag === 'user_visible_auto_notification' || !event.notification.data) {
@@ -74,7 +104,7 @@ self.addEventListener('notificationclick', function(event) {
         clients.matchAll({
             type: 'window'
         })
-        .then(function(clientList) {
+        .then(function (clientList) {
             var provider = ""
             if ('userAgent' in navigator) {
                 var browser = detectBrowser(navigator.userAgent);
@@ -92,7 +122,7 @@ self.addEventListener('notificationclick', function(event) {
 
 });
 
-var detectBrowserVersion = function(userAgent, regexp) {
+var detectBrowserVersion = function (userAgent, regexp) {
     var browserVersionSlice = userAgent.match(regexp);
     var browserVersion = "";
     if (browserVersionSlice && browserVersionSlice.length > 1) {
@@ -101,7 +131,7 @@ var detectBrowserVersion = function(userAgent, regexp) {
     return browserVersion;
 };
 
-var detectBrowser = function(userAgent) {
+var detectBrowser = function (userAgent) {
     var commonVersion = detectBrowserVersion(userAgent, /version\/(\d+(\.\d+)?)/i);
     var edgeVersion = detectBrowserVersion(userAgent, /edge\/(\d+(\.\d+)?)/i);
     var iVersion = detectBrowserVersion(userAgent, /(ipod|iphone|ipad)/i).toLowerCase();
@@ -171,19 +201,19 @@ var detectBrowser = function(userAgent) {
             puffin: true,
             version: detectBrowserVersion(userAgent, /(?:puffin)[\s\/](\d+(?:\.\d+)?)/i)
         };
-    } else if(/sleipnir/i.test(userAgent)) {
+    } else if (/sleipnir/i.test(userAgent)) {
         browser = {
             name: "Sleipnir",
             sleipnir: true,
             version: detectBrowserVersion(userAgent, /(?:sleipnir)[\s\/](\d+(?:\.\d+)+)/i)
         };
-    } else if(/k-meleon/i.test(userAgent)) {
+    } else if (/k-meleon/i.test(userAgent)) {
         browser = {
             name: "K-Meleon",
             kMeleon: true,
             version: detectBrowserVersion(userAgent, /(?:k-meleon)[\s\/](\d+(?:\.\d+)+)/i)
         };
-    } else if(/windows phone/i.test(userAgent)) {
+    } else if (/windows phone/i.test(userAgent)) {
         browser = {
             name: "Windows Phone",
             windowsphone: true
@@ -195,13 +225,13 @@ var detectBrowser = function(userAgent) {
             browser.msie = true;
             browser.version = detectBrowserVersion(userAgent, /iemobile\/(\d+(\.\d+)?)/i);
         }
-    } else if(/msie|trident/i.test(userAgent)) {
+    } else if (/msie|trident/i.test(userAgent)) {
         browser = {
             name: "Internet Explorer",
             msie: true,
             version: detectBrowserVersion(userAgent, /(?:msie |rv:)(\d+(\.\d+)?)/i)
         };
-    } else if(/CrOS/.test(userAgent)) {
+    } else if (/CrOS/.test(userAgent)) {
         browser = {
             name: "Chrome",
             chromeos: true,
@@ -221,19 +251,19 @@ var detectBrowser = function(userAgent) {
             vivaldi: true,
             version: detectBrowserVersion(userAgent, /vivaldi\/(\d+(\.\d+)?)/i) || commonVersion
         };
-    } else if(isSailfish) {
+    } else if (isSailfish) {
         browser = {
             name: "Sailfish",
             sailfish: true,
             version: detectBrowserVersion(userAgent, /sailfish\s?browser\/(\d+(\.\d+)?)/i)
         };
-    } else if(/seamonkey\//i.test(userAgent)) {
+    } else if (/seamonkey\//i.test(userAgent)) {
         browser = {
             name: "SeaMonkey",
             seamonkey: true,
             version: detectBrowserVersion(userAgent, /seamonkey\/(\d+(\.\d+)?)/i)
         };
-    } else if(/firefox|iceweasel|fxios/i.test(userAgent)) {
+    } else if (/firefox|iceweasel|fxios/i.test(userAgent)) {
         browser = {
             name: "Firefox",
             firefox: true,
@@ -242,31 +272,31 @@ var detectBrowser = function(userAgent) {
         if (/\((mobile|tablet);[^\)]*rv:[\d\.]+\)/i.test(userAgent)) {
             browser.firefoxos = true;
         }
-    } else if(isSilk) {
+    } else if (isSilk) {
         browser = {
             name: "Amazon Silk",
             silk: true,
             version: detectBrowserVersion(userAgent, /silk\/(\d+(\.\d+)?)/i)
         };
-    } else if(/phantom/i.test(userAgent)) {
+    } else if (/phantom/i.test(userAgent)) {
         browser = {
             name: "PhantomJS",
             phantom: true,
             version: detectBrowserVersion(userAgent, /phantomjs\/(\d+(\.\d+)?)/i)
         };
-    } else if(/slimerjs/i.test(userAgent)) {
+    } else if (/slimerjs/i.test(userAgent)) {
         browser = {
             name: "SlimerJS",
             slimer: true,
             version: detectBrowserVersion(userAgent, /slimerjs\/(\d+(\.\d+)?)/i)
         };
-    } else if(/blackberry|\bbb\d+/i.test(userAgent) || /rim\stablet/i.test(userAgent)) {
+    } else if (/blackberry|\bbb\d+/i.test(userAgent) || /rim\stablet/i.test(userAgent)) {
         browser = {
             name: "BlackBerry",
             blackberry: true,
             version: commonVersion || detectBrowserVersion(userAgent, /blackberry[\d]+\/(\d+(\.\d+)?)/i)
         };
-    } else if(isWebHPW) {
+    } else if (isWebHPW) {
         browser = {
             name: "WebOS",
             webos: true,
@@ -275,13 +305,13 @@ var detectBrowser = function(userAgent) {
         if (/touchpad\//i.test(userAgent)) {
             browser.touchpad = true;
         }
-    } else if(/bada/i.test(userAgent)) {
+    } else if (/bada/i.test(userAgent)) {
         browser = {
             name: "Bada",
             bada: true,
             version: detectBrowserVersion(userAgent, /dolfin\/(\d+(\.\d+)?)/i)
         };
-    } else if(isTizen) {
+    } else if (isTizen) {
         browser = {
             name: "Tizen",
             tizen: true,
@@ -305,12 +335,12 @@ var detectBrowser = function(userAgent) {
             chrome: true,
             version: detectBrowserVersion(userAgent, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
         };
-    } else if(isAndroid) {
+    } else if (isAndroid) {
         browser = {
             name: "Android",
             version: commonVersion
         };
-    } else if(/safari|applewebkit/i.test(userAgent)) {
+    } else if (/safari|applewebkit/i.test(userAgent)) {
         browser = {
             name: "Safari",
             safari: true
@@ -318,14 +348,14 @@ var detectBrowser = function(userAgent) {
         if (commonVersion) {
             browser.version = commonVersion;
         }
-    } else if(iVersion) {
+    } else if (iVersion) {
         browser = {
             name: "iphone" == i ? "iPhone" : "ipad" == i ? "iPad" : "iPod"
         };
         if (commonVersion) {
             browser.version = commonVersion;
         }
-    } else if(/googlebot/i.test(userAgent)) {
+    } else if (/googlebot/i.test(userAgent)) {
         browser = {
             name: "Googlebot",
             googlebot: true,
@@ -402,10 +432,10 @@ var detectBrowser = function(userAgent) {
     return browser;
 };
 
-var getAKServerLink = function() {
+var getAKServerLink = function () {
     return "https://" + "cookiesaver.kuplyaev.wip.altkraft.com:27443";
-}
+};
 
-var getAKServerPushContentGetSubscriptionLink = function() {
+var getAKServerPushContentGetSubscriptionLink = function () {
     return getAKServerLink() + "/push" + "/content" + "/get";
-}
+};
