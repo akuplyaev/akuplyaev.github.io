@@ -55,11 +55,13 @@ if ('serviceWorker' in navigator) {
 messaging.onMessage(
     function (payload) {
         console.log("On message app: ", payload);
-        var options = {
-            body: payload.data.message + " " + payload.data.key,
-            icon: payload.data.icon,
-            click_action: payload.data.action
+        var title = payload.notification.title;
+        var notificationOptions = {
+            body: payload.notification.body,
+            icon: payload.notification.icon,
+            click_action: payload.notification.click_action
         };
+        new Notification(title, notificationOptions);
     }
 );
 
