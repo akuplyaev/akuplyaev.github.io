@@ -2,14 +2,6 @@ importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
 var isFireBase = true;
-self.addEventListener('install', function (event) {
-    console.log("Install service worker script");
-});
-
-self.addEventListener('fetch', function (event) {
-    console.log("Fetch service worker script");
-});
-
 var config = {
     apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
     authDomain: "testfirefoxpush.firebaseapp.com",
@@ -19,6 +11,13 @@ var config = {
     messagingSenderId: "677094341418"
 };
 firebase.initializeApp(config);
+self.addEventListener('install', function (event) {
+    console.log("Install service worker script");
+});
+
+self.addEventListener('fetch', function (event) {
+    console.log("Fetch service worker script");
+});
 
 const messaging = firebase.messaging();
 
