@@ -508,11 +508,11 @@ var AKPush = function (akPushConfig) {
         messaging.onMessage(
             function (payload) {
                 console.log("On message app: ", payload);
-                var title = payload.data.title;
+                var title = payload.notification.title;
                 var notificationOptions = {
-                    body: payload.data.message + " " + payload.data.key,
-                    icon: payload.data.icon,
-                    click_action: payload.data.action
+                    body: payload.notification.message + " " + payload.notification.key,
+                    icon: payload.notification.icon,
+                    click_action: payload.notification.action
                 };
                 new Notification(title, notificationOptions);
             }
