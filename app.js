@@ -17,7 +17,6 @@ const messaging = firebase.messaging();
 
 
 if ('serviceWorker' in navigator) {
-
     navigator.serviceWorker.register('./firebase-messaging-sw.js')
         .then((registration) => {
             messaging.useServiceWorker(registration);
@@ -72,7 +71,7 @@ sendSubscriptionToServerForSave = function (token, customData, provider) {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, customData || {}, {
-            'provider': provider || "ChromeFirebase",
+            'provider': provider || "FirefoxFirebase",
             'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify({}),
