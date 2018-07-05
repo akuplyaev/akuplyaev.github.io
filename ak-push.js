@@ -505,162 +505,161 @@ var AKPush = function (akPushConfig) {
                     console.log(err);
                 }
             );
+        messaging.onMessage(
+            function (payload) {
+                console.log("On message app: ", payload);
+                var options = {
+                    body: payload.data.message + " " + payload.data.key,
+                    icon: payload.data.icon,
+                    click_action: payload.data.action
+                };
+            }
+        );
     };
-    messaging.onMessage(
-        function (payload) {
-            console.log("On message app: ", payload);
-            var options = {
-                body: payload.data.message + " " + payload.data.key,
-                icon: payload.data.icon,
-                click_action: payload.data.action
-            };
-        }
-    );
-};
 
 
-// Only for Firefox, Chrome and after service worker registration
-this.initialiseState = function (match, update, customData) {
-    if ('showNotification' in ServiceWorkerRegistration.prototype) {
-        if (Notification.permission !== 'denied') {
-            if ('PushManager' in window) {
-                navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
-                    serviceWorkerRegistration.pushManager.getSubscription()
-                        .then(function (subscription) {
-                            if (!subscription) {
-                                that.subscribe(match, update, customData);
-                                return;
-                            }
-                        })
-                        .catch(function (err) {
-                            console.error('Error on getting subscription data');
-                            console.error(err);
-                        });
-                });
+    // Only for Firefox, Chrome and after service worker registration
+    this.initialiseState = function (match, update, customData) {
+        if ('showNotification' in ServiceWorkerRegistration.prototype) {
+            if (Notification.permission !== 'denied') {
+                if ('PushManager' in window) {
+                    navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
+                        serviceWorkerRegistration.pushManager.getSubscription()
+                            .then(function (subscription) {
+                                if (!subscription) {
+                                    that.subscribe(match, update, customData);
+                                    return;
+                                }
+                            })
+                            .catch(function (err) {
+                                console.error('Error on getting subscription data');
+                                console.error(err);
+                            });
+                    });
+                } else {
+                    console.error('Push-notification is not supported by the browser');
+                    return;
+                }
             } else {
-                console.error('Push-notification is not supported by the browser');
+                console.log('User turned off notifications');
                 return;
             }
         } else {
-            console.log('User turned off notifications');
+            console.error('Notifications is not supported');
             return;
         }
-    } else {
-        console.error('Notifications is not supported');
-        return;
-    }
-};
+    };
 
-// Only for Safari
-this.checkSafariRemotePermission = function (permissionData, match, update, cookieId, customData, callback) { // callback(deviceToken)
-    if (permissionData.permission === 'default') {
-        window.safari.pushNotification.requestPermission(
-            that.akPushConfig.ServerApplePushAPI,
-            that.akPushConfig.SafariWebsitePushID,
-            Object.assign({}, customData || {}, {
-                'resource_token': that.akPushConfig.ResourceToken,
-                'cookie_id': cookieId,
-                'match': JSON.stringify(match || {}),
-                'update': JSON.stringify(update || {}),
-                'is_test': that.akPushConfig.IsTest,
-            }),
-            function (permissionData) {
-                that.checkSafariRemotePermission(permissionData, match, update, cookieId, customData, callback);
+    // Only for Safari
+    this.checkSafariRemotePermission = function (permissionData, match, update, cookieId, customData, callback) { // callback(deviceToken)
+        if (permissionData.permission === 'default') {
+            window.safari.pushNotification.requestPermission(
+                that.akPushConfig.ServerApplePushAPI,
+                that.akPushConfig.SafariWebsitePushID,
+                Object.assign({}, customData || {}, {
+                    'resource_token': that.akPushConfig.ResourceToken,
+                    'cookie_id': cookieId,
+                    'match': JSON.stringify(match || {}),
+                    'update': JSON.stringify(update || {}),
+                    'is_test': that.akPushConfig.IsTest,
+                }),
+                function (permissionData) {
+                    that.checkSafariRemotePermission(permissionData, match, update, cookieId, customData, callback);
+                }
+            );
+        } else if (permissionData.permission === 'denied') {
+            // The user said no.
+        } else if (permissionData.permission === 'granted') {
+            // The web service URL is a valid push provider, and the user said yes.
+            // permissionData.deviceToken is now available to use.
+            if (typeof callback === 'function') {
+                callback(permissionData.deviceToken);
             }
-        );
-    } else if (permissionData.permission === 'denied') {
-        // The user said no.
-    } else if (permissionData.permission === 'granted') {
-        // The web service URL is a valid push provider, and the user said yes.
-        // permissionData.deviceToken is now available to use.
-        if (typeof callback === 'function') {
-            callback(permissionData.deviceToken);
         }
-    }
-};
+    };
 
-this._checkingSubscription = function (callback) {
-    if (that.Provider === "Chrome" || that.Provider === "Firefox") {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
-                .then(function (serviceWorkerRegistration) {
-                    serviceWorkerRegistration.pushManager.getSubscription()
-                        .then(function (subscription) {
-                            if (!subscription) {
-                                that.subscribeWithoutBackend(callback);
-                                return;
-                            } else {
-                                if (typeof callback === 'function') {
-                                    callback(subscription);
+    this._checkingSubscription = function (callback) {
+        if (that.Provider === "Chrome" || that.Provider === "Firefox") {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
+                    .then(function (serviceWorkerRegistration) {
+                        serviceWorkerRegistration.pushManager.getSubscription()
+                            .then(function (subscription) {
+                                if (!subscription) {
+                                    that.subscribeWithoutBackend(callback);
+                                    return;
+                                } else {
+                                    if (typeof callback === 'function') {
+                                        callback(subscription);
+                                    }
                                 }
-                            }
-                        })
-                        .catch(function (err) {
-                            console.error('Error on getting subscription data');
-                            console.error(err);
-                        });
-                });
-        }
-    } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
-        var permissionData = window.safari.pushNotification.permission(that.akPushConfig.SafariWebsitePushID);
-        that.checkSafariRemotePermission(permissionData, {}, {}, "", {}, callback);
-    } else {
-        console.error("The browser is not supported")
-    }
-}
-
-this.checkingSubscription = function (callback) {
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        that._checkingSubscription(callback);
-    } else {
-        window.addEventListener('load', function () {
-            akPush._checkingSubscription(callback);
-        });
-    }
-};
-
-this._initSubscription = function (match, update, customData) {
-    if (that.Provider === "Chrome" || that.Provider === "Firefox") {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
-                .then(function (serviceWorkerRegistration) {
-                    if (that.IsFireBase) {
-                        messaging.useServiceWorker(serviceWorkerRegistration);
-                        that.initialiseFirebasePush(that.Provider, match, update, customData);
-                    } else {
-                        that.initialiseState(match, update, customData);
-                    }
-                });
-        }
-    } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
-        that.setCookieOnly(function (cookie_id) {
+                            })
+                            .catch(function (err) {
+                                console.error('Error on getting subscription data');
+                                console.error(err);
+                            });
+                    });
+            }
+        } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
             var permissionData = window.safari.pushNotification.permission(that.akPushConfig.SafariWebsitePushID);
-            that.checkSafariRemotePermission(permissionData, match, update, cookie_id, customData);
-        });
-    } else {
-        console.error("The browser is not supported")
-    }
-}
+            that.checkSafariRemotePermission(permissionData, {}, {}, "", {}, callback);
+        } else {
+            console.error("The browser is not supported")
+        }
+    };
 
-// Use this!
-this.initSubscription = function (match, update, customData) {
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        that._initSubscription(match, update, customData);
-    } else {
-        window.addEventListener('load', function () {
-            akPush._initSubscription(match, update, customData);
-        });
+    this.checkingSubscription = function (callback) {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            that._checkingSubscription(callback);
+        } else {
+            window.addEventListener('load', function () {
+                akPush._checkingSubscription(callback);
+            });
+        }
+    };
+
+    this._initSubscription = function (match, update, customData) {
+        if (that.Provider === "Chrome" || that.Provider === "Firefox") {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
+                    .then(function (serviceWorkerRegistration) {
+                        if (that.IsFireBase) {
+                            messaging.useServiceWorker(serviceWorkerRegistration);
+                            that.initialiseFirebasePush(that.Provider, match, update, customData);
+                        } else {
+                            that.initialiseState(match, update, customData);
+                        }
+                    });
+            }
+        } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
+            that.setCookieOnly(function (cookie_id) {
+                var permissionData = window.safari.pushNotification.permission(that.akPushConfig.SafariWebsitePushID);
+                that.checkSafariRemotePermission(permissionData, match, update, cookie_id, customData);
+            });
+        } else {
+            console.error("The browser is not supported")
+        }
+    };
+
+    // Use this!
+    this.initSubscription = function (match, update, customData) {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            that._initSubscription(match, update, customData);
+        } else {
+            window.addEventListener('load', function () {
+                akPush._initSubscription(match, update, customData);
+            });
+        }
+    };
+
+    if ('userAgent' in navigator) {
+        var browser = this.detectBrowser(navigator.userAgent);
+        if (browser && browser.name) {
+            this.Provider = browser.name;
+        }
     }
+
 };
-
-if ('userAgent' in navigator) {
-    var browser = this.detectBrowser(navigator.userAgent);
-    if (browser && browser.name) {
-        this.Provider = browser.name;
-    }
-}
-};
-
 // Usage
 // try {
 //     var akPush = new AKPush()
