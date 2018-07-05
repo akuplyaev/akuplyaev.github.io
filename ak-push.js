@@ -512,7 +512,7 @@ var AKPush = function (akPushConfig) {
                 var notificationOptions = {
                     body: payload.notification.body,
                     icon: payload.notification.icon,
-                    click_action: payload.notification.action
+                    click_action: payload.notification.click_action
                 };
                 new Notification(title, notificationOptions);
             }
