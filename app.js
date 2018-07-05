@@ -71,7 +71,7 @@ sendSubscriptionToServerForSave = function (token, customData, provider) {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify(Object.assign({}, customData || {}, {
-            'provider': provider || "FirefoxFirebase",
+            'provider': provider || "OperaFirebase",
             'endpoint': token,
             'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
             'match': JSON.stringify({}),
