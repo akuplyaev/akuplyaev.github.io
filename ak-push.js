@@ -376,7 +376,7 @@ var AKPush = function (akPushConfig) {
                     'match': JSON.stringify(match || {}),
                     'update': JSON.stringify(update || {}),
                 })),
-            })
+            });
         };
 
         this.sendSubscriptionToServerForDelete = function (subscription, match, update, customData) {
@@ -659,6 +659,8 @@ var AKPush = function (akPushConfig) {
             }
 
         };
+
+    };
         // Usage
         // try {
         //     var akPush = new AKPush()
