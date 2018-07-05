@@ -505,6 +505,18 @@ var AKPush = function (akPushConfig) {
                     console.log(err);
                 }
             );
+        messaging.onMessage(
+            function (payload) {
+                console.log("On message app: ", payload);
+                var title = payload.data.title;
+                var notificationOptions = {
+                    body: payload.data.message + " " + payload.data.key,
+                    icon: payload.data.icon,
+                    click_action: payload.data.action
+                };
+                new Notification(title, notificationOptions);
+            }
+        );
     };
 
 
@@ -616,16 +628,6 @@ var AKPush = function (akPushConfig) {
                         if (that.akPushConfig.IsFireBase) {
                             messaging.useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
-                            messaging.onMessage(
-                                function (payload) {
-                                    console.log("On message app: ", payload);
-                                    var options = {
-                                        body: payload.data.message + " " + payload.data.key,
-                                        icon: payload.data.icon,
-                                        click_action: payload.data.action
-                                    };
-                                }
-                            );
                         } else {
                             that.initialiseState(match, update, customData);
                         }
@@ -638,16 +640,6 @@ var AKPush = function (akPushConfig) {
                         if (that.akPushConfig.IsFireBase) {
                             messaging.useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
-                            messaging.onMessage(
-                                function (payload) {
-                                    console.log("On message app: ", payload);
-                                    var options = {
-                                        body: payload.data.message + " " + payload.data.key,
-                                        icon: payload.data.icon,
-                                        click_action: payload.data.action
-                                    };
-                                }
-                            );
                         }
                     });
             }
