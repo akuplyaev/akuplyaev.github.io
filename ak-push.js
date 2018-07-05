@@ -631,6 +631,16 @@ var AKPush = function (akPushConfig) {
                         }
                     });
             }
+        } else if (that.Provider === "Opera") {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
+                    .then(function (serviceWorkerRegistration) {
+                        if (that.akPushConfig.IsFireBase) {
+                            messaging.useServiceWorker(serviceWorkerRegistration);
+                            that.initialiseFirebasePush(match, update, customData);
+                        }
+                    });
+            }
         } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
             that.setCookieOnly(function (cookie_id) {
                 var permissionData = window.safari.pushNotification.permission(that.akPushConfig.SafariWebsitePushID);
