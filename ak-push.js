@@ -639,7 +639,8 @@ var AKPush = function (akPushConfig) {
         } else {
             console.error("The browser is not supported")
         }
-    };
+    }
+
     // Use this!
     this.initSubscription = function (match, update, customData) {
         if (document.readyState === 'complete' || document.readyState === 'interactive') {

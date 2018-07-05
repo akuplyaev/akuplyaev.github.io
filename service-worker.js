@@ -1,6 +1,14 @@
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
+var isFireBase = true;
+self.addEventListener('install', function (event) {
+    console.log("Install service worker script");
+});
+
+self.addEventListener('fetch', function (event) {
+    console.log("Fetch service worker script");
+});
 
 var config = {
     apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
@@ -27,14 +35,6 @@ messaging.setBackgroundMessageHandler(
     }
 );
 
-
-self.addEventListener('install', function (event) {
-    console.log("Install service worker script");
-});
-
-self.addEventListener('fetch', function (event) {
-    console.log("Fetch service worker script");
-});
 
 self.addEventListener('push', function (event) {
     // console.log('Push-notification has been received');
@@ -110,6 +110,9 @@ self.addEventListener('notificationclick', function (event) {
                 var browser = detectBrowser(navigator.userAgent);
                 if (browser && browser.name) {
                     provider = browser.name;
+                    if (isFireBase) {
+                        provider = provider + "Firebase";
+                    }
                 }
             }
             var url = event.notification.data;
