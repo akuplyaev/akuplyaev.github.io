@@ -34,63 +34,65 @@ messaging.setBackgroundMessageHandler(
     }
 );
 
-
-self.addEventListener('push', function (event) {
-    // console.log('Push-notification has been received');
-    // console.log(event);
-    event.waitUntil(
-        self.registration.pushManager.getSubscription().then(function (subscription) {
-            var provider = ""
-            if ('userAgent' in navigator) {
-                var browser = detectBrowser(navigator.userAgent);
-                if (browser && browser.name) {
-                    provider = browser.name;
-                }
-            }
-            return fetch(getAKServerPushContentGetSubscriptionLink(), {
-                    method: 'post',
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        'provider': provider,
-                        'endpoint': subscription.endpoint,
-                        'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
-                    })
-                })
-                .then(function (response) {
-                    if (response.status !== 200) {
-                        console.error('Error on getting push content');
-                        console.error(response.status);
-                        throw new Error();
+if (!isFireBase) {
+    self.addEventListener('push', function (event) {
+        // console.log('Push-notification has been received');
+        // console.log(event);
+        event.waitUntil(
+            self.registration.pushManager.getSubscription().then(function (subscription) {
+                var provider = ""
+                if ('userAgent' in navigator) {
+                    var browser = detectBrowser(navigator.userAgent);
+                    if (browser && browser.name) {
+                        provider = browser.name;
                     }
-
-                    return response.json().then(function (data) {
-                        if (data.error) {
-                            console.error('The server returns an error');
-                            console.error(data.error);
+                }
+                return fetch(getAKServerPushContentGetSubscriptionLink(), {
+                        method: 'post',
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            'provider': provider,
+                            'endpoint': subscription.endpoint,
+                            'resource_token': "vujNq8yMTDg-8bd58a5e46439e8f",
+                        })
+                    })
+                    .then(function (response) {
+                        if (response.status !== 200) {
+                            console.error('Error on getting push content');
+                            console.error(response.status);
                             throw new Error();
                         }
 
-                        var title = data.data.title;
-                        var body = data.data.body;
-                        var icon = data.data.icon;
-                        var tag = data.data.tag;
-                        var data = data.data.data;
+                        return response.json().then(function (data) {
+                            if (data.error) {
+                                console.error('The server returns an error');
+                                console.error(data.error);
+                                throw new Error();
+                            }
 
-                        return self.registration.showNotification(title, {
-                            body: body,
-                            icon: icon,
-                            tag: tag,
-                            data: data
+                            var title = data.data.title;
+                            var body = data.data.body;
+                            var icon = data.data.icon;
+                            var tag = data.data.tag;
+                            var data = data.data.data;
+
+                            return self.registration.showNotification(title, {
+                                body: body,
+                                icon: icon,
+                                tag: tag,
+                                data: data
+                            });
                         });
-                    });
-                })
-                .catch(function (err) {
-                    console.error('Unable to receive data from server');
-                    console.error(err);
-                })
-        })
-    );
-});
+                    })
+                    .catch(function (err) {
+                        console.error('Unable to receive data from server');
+                        console.error(err);
+                    })
+            })
+        );
+    });
+}
+
 
 self.addEventListener('notificationclick', function (event) {
     // console.log('User has clicked in the notification');
