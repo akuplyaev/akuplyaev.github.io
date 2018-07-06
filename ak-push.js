@@ -1,4 +1,3 @@
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 // akPushConfig = {
 //     ResourceToken: 'resource-token',
 //     ServerHost: 'server-host',
