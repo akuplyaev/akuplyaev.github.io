@@ -351,7 +351,7 @@ var AKPush = function(akPushConfig) {
 
     this.sendSubscriptionToServerForSave = function(subscription, match, update, customData) {
      	let provider = "";
-        if (that.akPushConfig.IsFireBase) {
+        if (that.akPushConfig.IsWebFirebase) {
             provider = that.Provider + "Firebase";
 	}
         fetch(that._getAKServerSaveSubscriptionLink(), {
