@@ -625,7 +625,7 @@ var AKPush = function(akPushConfig) {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
                     .then(function (serviceWorkerRegistration) {
-                        if (that.akPushConfig.IsFireBase) {
+                        if (that.akPushConfig.IsWebFirebase) {
                             messaging.useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
                         } else {
