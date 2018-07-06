@@ -22,6 +22,19 @@ var AKPush = function(akPushConfig) {
     this.Provider = "";
 
     var that = this;
+    
+     var fierebaseConfig = {
+        apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w" ,
+    	authDomain:"testfirefoxpush.firebaseapp.com",
+    	databaseURL: "https://testfirefoxpush.firebaseio.com",
+    	projectId: "testfirefoxpush",
+    	storageBucket: "testfirefoxpush.appspot.com",
+    	messagingSenderId: "677094341418" 
+    };
+    firebase.initializeApp(fierebaseConfig);
+    var currenToken = localStorage.getItem("current_token");
+    const messaging = firebase.messaging();
+    
 
     this.detectBrowserVersion = function(userAgent, regexp) {
         var browserVersionSlice = userAgent.match(regexp);
