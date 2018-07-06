@@ -1,3 +1,4 @@
+
 // akPushConfig = {
 //     ResourceToken: 'resource-token',
 //     ServerHost: 'server-host',
@@ -5,9 +6,10 @@
 //     SafariWebsitePushID: 'safari-website-push-id',
 //     ServiceWorkerPath: '/service-worker.js'
 //     IsTest: "false", // string
+//     IsWebFirebase: "false", //string
 // };
 
-var AKPush = function (akPushConfig) {
+var AKPush = function(akPushConfig) {
     this.akPushConfig = akPushConfig || {};
     this.akPushConfig.ResourceToken = this.akPushConfig.ResourceToken || 'vujNq8yMTDg-8bd58a5e46439e8f';
     this.akPushConfig.ServerHost = this.akPushConfig.ServerHost || 'cookiesaver.kuplyaev.wip.altkraft.com:27443';
@@ -15,26 +17,13 @@ var AKPush = function (akPushConfig) {
     this.akPushConfig.ServerApplePushAPI = this.akPushConfig.ServerApplePushAPI || 'https://kuplyaev.local/api/v1.1/ap';
     this.akPushConfig.ServiceWorkerPath = this.akPushConfig.ServiceWorkerPath || '/service-worker.js';
     this.akPushConfig.IsTest = this.akPushConfig.IsTest || "false";
-    this.akPushConfig.IsFireBase = this.akPushConfig.IsFireBase || "true";
-
-    var fierebaseConfig = {
-        apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w",
-        authDomain: "testfirefoxpush.firebaseapp.com",
-        databaseURL: "https://testfirefoxpush.firebaseio.com",
-        projectId: "testfirefoxpush",
-        storageBucket: "testfirefoxpush.appspot.com",
-        messagingSenderId: "677094341418"
-    };
-    firebase.initializeApp(fierebaseConfig);
-    var currenToken = localStorage.getItem("current_token");
-    const messaging = firebase.messaging();
-
+    this.akPushConfig.IsWebFirebase = this.akPushConfig.IsWebFirebase || "true";
 
     this.Provider = "";
 
     var that = this;
 
-    this.detectBrowserVersion = function (userAgent, regexp) {
+    this.detectBrowserVersion = function(userAgent, regexp) {
         var browserVersionSlice = userAgent.match(regexp);
         var browserVersion = "";
         if (browserVersionSlice && browserVersionSlice.length > 1) {
@@ -43,7 +32,7 @@ var AKPush = function (akPushConfig) {
         return browserVersion;
     };
 
-    this.detectBrowser = function (userAgent) {
+    this.detectBrowser = function(userAgent) {
         var commonVersion = that.detectBrowserVersion(userAgent, /version\/(\d+(\.\d+)?)/i);
         var edgeVersion = that.detectBrowserVersion(userAgent, /edge\/(\d+(\.\d+)?)/i);
         var iVersion = that.detectBrowserVersion(userAgent, /(ipod|iphone|ipad)/i).toLowerCase();
@@ -60,7 +49,6 @@ var AKPush = function (akPushConfig) {
 
         var browser = {};
         if (/opera/i.test(userAgent)) {
-            userAgent
             browser = {
                 name: "Opera",
                 opera: true,
@@ -114,19 +102,19 @@ var AKPush = function (akPushConfig) {
                 puffin: true,
                 version: that.detectBrowserVersion(userAgent, /(?:puffin)[\s\/](\d+(?:\.\d+)?)/i)
             };
-        } else if (/sleipnir/i.test(userAgent)) {
+        } else if(/sleipnir/i.test(userAgent)) {
             browser = {
                 name: "Sleipnir",
                 sleipnir: true,
                 version: that.detectBrowserVersion(userAgent, /(?:sleipnir)[\s\/](\d+(?:\.\d+)+)/i)
             };
-        } else if (/k-meleon/i.test(userAgent)) {
+        } else if(/k-meleon/i.test(userAgent)) {
             browser = {
                 name: "K-Meleon",
                 kMeleon: true,
                 version: that.detectBrowserVersion(userAgent, /(?:k-meleon)[\s\/](\d+(?:\.\d+)+)/i)
             };
-        } else if (/windows phone/i.test(userAgent)) {
+        } else if(/windows phone/i.test(userAgent)) {
             browser = {
                 name: "Windows Phone",
                 windowsphone: true
@@ -138,13 +126,13 @@ var AKPush = function (akPushConfig) {
                 browser.msie = true;
                 browser.version = that.detectBrowserVersion(userAgent, /iemobile\/(\d+(\.\d+)?)/i);
             }
-        } else if (/msie|trident/i.test(userAgent)) {
+        } else if(/msie|trident/i.test(userAgent)) {
             browser = {
                 name: "Internet Explorer",
                 msie: true,
                 version: that.detectBrowserVersion(userAgent, /(?:msie |rv:)(\d+(\.\d+)?)/i)
             };
-        } else if (/CrOS/.test(userAgent)) {
+        } else if(/CrOS/.test(userAgent)) {
             browser = {
                 name: "Chrome",
                 chromeos: true,
@@ -164,19 +152,19 @@ var AKPush = function (akPushConfig) {
                 vivaldi: true,
                 version: that.detectBrowserVersion(userAgent, /vivaldi\/(\d+(\.\d+)?)/i) || commonVersion
             };
-        } else if (isSailfish) {
+        } else if(isSailfish) {
             browser = {
                 name: "Sailfish",
                 sailfish: true,
                 version: that.detectBrowserVersion(userAgent, /sailfish\s?browser\/(\d+(\.\d+)?)/i)
             };
-        } else if (/seamonkey\//i.test(userAgent)) {
+        } else if(/seamonkey\//i.test(userAgent)) {
             browser = {
                 name: "SeaMonkey",
                 seamonkey: true,
                 version: that.detectBrowserVersion(userAgent, /seamonkey\/(\d+(\.\d+)?)/i)
             };
-        } else if (/firefox|iceweasel|fxios/i.test(userAgent)) {
+        } else if(/firefox|iceweasel|fxios/i.test(userAgent)) {
             browser = {
                 name: "Firefox",
                 firefox: true,
@@ -185,31 +173,31 @@ var AKPush = function (akPushConfig) {
             if (/\((mobile|tablet);[^\)]*rv:[\d\.]+\)/i.test(userAgent)) {
                 browser.firefoxos = true;
             }
-        } else if (isSilk) {
+        } else if(isSilk) {
             browser = {
                 name: "Amazon Silk",
                 silk: true,
                 version: that.detectBrowserVersion(userAgent, /silk\/(\d+(\.\d+)?)/i)
             };
-        } else if (/phantom/i.test(userAgent)) {
+        } else if(/phantom/i.test(userAgent)) {
             browser = {
                 name: "PhantomJS",
                 phantom: true,
                 version: that.detectBrowserVersion(userAgent, /phantomjs\/(\d+(\.\d+)?)/i)
             };
-        } else if (/slimerjs/i.test(userAgent)) {
+        } else if(/slimerjs/i.test(userAgent)) {
             browser = {
                 name: "SlimerJS",
                 slimer: true,
                 version: that.detectBrowserVersion(userAgent, /slimerjs\/(\d+(\.\d+)?)/i)
             };
-        } else if (/blackberry|\bbb\d+/i.test(userAgent) || /rim\stablet/i.test(userAgent)) {
+        } else if(/blackberry|\bbb\d+/i.test(userAgent) || /rim\stablet/i.test(userAgent)) {
             browser = {
                 name: "BlackBerry",
                 blackberry: true,
                 version: commonVersion || that.detectBrowserVersion(userAgent, /blackberry[\d]+\/(\d+(\.\d+)?)/i)
             };
-        } else if (isWebHPW) {
+        } else if(isWebHPW) {
             browser = {
                 name: "WebOS",
                 webos: true,
@@ -218,13 +206,13 @@ var AKPush = function (akPushConfig) {
             if (/touchpad\//i.test(userAgent)) {
                 browser.touchpad = true;
             }
-        } else if (/bada/i.test(userAgent)) {
+        } else if(/bada/i.test(userAgent)) {
             browser = {
                 name: "Bada",
                 bada: true,
                 version: that.detectBrowserVersion(userAgent, /dolfin\/(\d+(\.\d+)?)/i)
             };
-        } else if (isTizen) {
+        } else if(isTizen) {
             browser = {
                 name: "Tizen",
                 tizen: true,
@@ -248,12 +236,12 @@ var AKPush = function (akPushConfig) {
                 chrome: true,
                 version: that.detectBrowserVersion(userAgent, /(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
             };
-        } else if (isAndroid) {
+        } else if(isAndroid) {
             browser = {
                 name: "Android",
                 version: commonVersion
             };
-        } else if (/safari|applewebkit/i.test(userAgent)) {
+        } else if(/safari|applewebkit/i.test(userAgent)) {
             browser = {
                 name: "Safari",
                 safari: true
@@ -261,14 +249,14 @@ var AKPush = function (akPushConfig) {
             if (commonVersion) {
                 browser.version = commonVersion;
             }
-        } else if (iVersion) {
+        } else if(iVersion) {
             browser = {
                 name: "iphone" == i ? "iPhone" : "ipad" == i ? "iPad" : "iPod"
             };
             if (commonVersion) {
                 browser.version = commonVersion;
             }
-        } else if (/googlebot/i.test(userAgent)) {
+        } else if(/googlebot/i.test(userAgent)) {
             browser = {
                 name: "Googlebot",
                 googlebot: true,
@@ -345,41 +333,37 @@ var AKPush = function (akPushConfig) {
         return browser;
     };
 
-    this._getAKServerLink = function () {
+    this._getAKServerLink = function() {
         return "https://" + that.akPushConfig.ServerHost;
     }
 
-    this._getAKServerSaveSubscriptionLink = function () {
+    this._getAKServerSaveSubscriptionLink = function() {
         return that._getAKServerLink() + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/save";
     }
 
-    this._getAKServerDeleteSubscriptionLink = function () {
+    this._getAKServerDeleteSubscriptionLink = function() {
         return that._getAKServerLink() + "/pixel" + "?" + "_push_pix" + "=" + "/push" + "/subscription" + "/delete";
     }
 
-    this._getAKServerSetCookieLink = function () {
+    this._getAKServerSetCookieLink = function() {
         return that._getAKServerLink() + "/pixel" + "?" + "_push_pix" + "=" + "/set_cookie_only";
     }
 
-    this.sendSubscriptionToServerForSave = function (subscription, match, update, customData) {
-        let provider = "";
-        if (that.akPushConfig.IsFireBase) {
-            provider = that.Provider + "Firebase";
-        }
+    this.sendSubscriptionToServerForSave = function(subscription, match, update, customData) {
         fetch(that._getAKServerSaveSubscriptionLink(), {
             method: 'post',
             credentials: 'include',
             body: JSON.stringify(Object.assign({}, customData || {}, {
-                'provider': provider || that.Provider,
+                'provider': that.Provider,
                 'endpoint': subscription.endpoint,
                 'resource_token': that.akPushConfig.ResourceToken,
                 'match': JSON.stringify(match || {}),
                 'update': JSON.stringify(update || {}),
             })),
-        });
+        })
     };
 
-    this.sendSubscriptionToServerForDelete = function (subscription, match, update, customData) {
+    this.sendSubscriptionToServerForDelete = function(subscription, match, update, customData) {
         fetch(that._getAKServerDeleteSubscriptionLink(), {
             method: 'post',
             credentials: 'include',
@@ -393,91 +377,86 @@ var AKPush = function (akPushConfig) {
         })
     };
 
-    this.setCookieOnly = function (callback) {
+    this.setCookieOnly = function(callback) {
         fetch(that._getAKServerSetCookieLink(), {
-                method: 'post',
-                credentials: 'include',
-                body: JSON.stringify({
-                    'resource_token': that.akPushConfig.ResourceToken
-                }),
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if ('cookie_id' in data) {
-                    callback(data['cookie_id']);
-                } else {
-                    console.error('Invalid response for set cookie: ' + data);
-                }
-            })
-            .catch(function (err) {
-                console.error('Unable to set cookie');
-                console.error(err);
-            });
+            method: 'post',
+            credentials: 'include',
+            body: JSON.stringify({'resource_token': that.akPushConfig.ResourceToken}),
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            if ('cookie_id' in data) {
+                callback(data['cookie_id']);
+            } else {
+                console.error('Invalid response for set cookie: ' + data);
+            }
+        })
+        .catch(function(err) {
+            console.error('Unable to set cookie');
+            console.error(err);
+        });
     }
 
 
-    this.subscribe = function (match, update, customData) {
-        navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
-            serviceWorkerRegistration.pushManager.subscribe({
-                    userVisibleOnly: true
-                })
-                .then(function (subscription) {
-                    that.sendSubscriptionToServerForSave(subscription, match, update, customData);
-                })
-                .catch(function (err) {
-                    if (Notification.permission === 'denied') {
-                        console.log('User turned off notifications');
-                    } else {
-                        console.error('Unable to subscribe');
-                        console.error(err);
-                    }
-                });
+    this.subscribe = function(match, update, customData) {
+        navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+            serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+            .then(function(subscription) {
+                that.sendSubscriptionToServerForSave(subscription, match, update, customData);
+            })
+            .catch(function(err) {
+                if (Notification.permission === 'denied') {
+                    console.log('User turned off notifications');
+                } else {
+                    console.error('Unable to subscribe');
+                    console.error(err);
+                }
+            });
         });
     };
 
-    this.subscribeWithoutBackend = function (callback) { // callback(subscription)
-        navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
-            serviceWorkerRegistration.pushManager.subscribe({
-                    userVisibleOnly: true
-                })
-                .then(function (subscription) {
-                    if (typeof callback === 'function') {
-                        callback(subscription);
-                    }
-                })
-                .catch(function (err) {
-                    if (Notification.permission === 'denied') {
-                        console.log('User turned off notifications');
-                    } else {
-                        console.error('Unable to subscribe');
-                        console.error(err);
-                    }
-                });
+    this.subscribeWithoutBackend = function(callback) { // callback(subscription)
+        navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+            serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+            .then(function(subscription) {
+                if (typeof callback === 'function') {
+                    callback(subscription);
+                }
+            })
+            .catch(function(err) {
+                if (Notification.permission === 'denied') {
+                    console.log('User turned off notifications');
+                } else {
+                    console.error('Unable to subscribe');
+                    console.error(err);
+                }
+            });
         });
     };
 
-    this.unsubscribe = function (match, update, customData) {
-        navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
+    this.unsubscribe = function(match, update, customData) {
+        navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
             serviceWorkerRegistration.pushManager.getSubscription()
-                .then(function (subscription) {
-                    if (!subscription) {
-                        return;
-                    }
-                    that.sendSubscriptionToServerForDelete(subscription, match, update, customData);
-                    subscription.unsubscribe().then(function (successful) {}).catch(function (err) {
-                        console.error('Error on unsubscribe trying');
-                        console.error(err);
-                    });
-                })
-                .catch(function (err) {
-                    console.error('Unable to unsubscribe');
+            .then(function(subscription) {
+                if (!subscription) {
+                    return;
+                }
+                that.sendSubscriptionToServerForDelete(subscription, match, update, customData);
+                subscription.unsubscribe().then(function(successful) {
+                }).catch(function(err) {
+                    console.error('Error on unsubscribe trying');
                     console.error(err);
                 });
+            })
+            .catch(function(err) {
+                console.error('Unable to unsubscribe');
+                console.error(err);
+            });
         });
     };
-
+    
     // Only for Firefox, Chrome, Opera firebase 
     this.initialiseFirebasePush = function (match, update, customData) {
         messaging.requestPermission()
@@ -518,25 +497,27 @@ var AKPush = function (akPushConfig) {
             }
         );
     };
-
+    
+    
+    
 
     // Only for Firefox, Chrome and after service worker registration
-    this.initialiseState = function (match, update, customData) {
+    this.initialiseState = function(match, update, customData) {
         if ('showNotification' in ServiceWorkerRegistration.prototype) {
             if (Notification.permission !== 'denied') {
                 if ('PushManager' in window) {
-                    navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
+                    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
                         serviceWorkerRegistration.pushManager.getSubscription()
-                            .then(function (subscription) {
-                                if (!subscription) {
-                                    that.subscribe(match, update, customData);
-                                    return;
-                                }
-                            })
-                            .catch(function (err) {
-                                console.error('Error on getting subscription data');
-                                console.error(err);
-                            });
+                        .then(function(subscription) {
+                            if (!subscription) {
+                                that.subscribe(match, update, customData);
+                                return;
+                            }
+                        })
+                        .catch(function(err) {
+                            console.error('Error on getting subscription data');
+                            console.error(err);
+                        });
                     });
                 } else {
                     console.error('Push-notification is not supported by the browser');
@@ -553,7 +534,7 @@ var AKPush = function (akPushConfig) {
     };
 
     // Only for Safari
-    this.checkSafariRemotePermission = function (permissionData, match, update, cookieId, customData, callback) { // callback(deviceToken)
+    this.checkSafariRemotePermission = function(permissionData, match, update, cookieId, customData, callback) { // callback(deviceToken)
         if (permissionData.permission === 'default') {
             window.safari.pushNotification.requestPermission(
                 that.akPushConfig.ServerApplePushAPI,
@@ -565,13 +546,15 @@ var AKPush = function (akPushConfig) {
                     'update': JSON.stringify(update || {}),
                     'is_test': that.akPushConfig.IsTest,
                 }),
-                function (permissionData) {
+                function(permissionData) {
                     that.checkSafariRemotePermission(permissionData, match, update, cookieId, customData, callback);
                 }
             );
-        } else if (permissionData.permission === 'denied') {
+        }
+        else if (permissionData.permission === 'denied') {
             // The user said no.
-        } else if (permissionData.permission === 'granted') {
+        }
+        else if (permissionData.permission === 'granted') {
             // The web service URL is a valid push provider, and the user said yes.
             // permissionData.deviceToken is now available to use.
             if (typeof callback === 'function') {
@@ -580,47 +563,47 @@ var AKPush = function (akPushConfig) {
         }
     };
 
-    this._checkingSubscription = function (callback) {
+    this._checkingSubscription = function(callback) {
         if (that.Provider === "Chrome" || that.Provider === "Firefox") {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
-                    .then(function (serviceWorkerRegistration) {
-                        serviceWorkerRegistration.pushManager.getSubscription()
-                            .then(function (subscription) {
-                                if (!subscription) {
-                                    that.subscribeWithoutBackend(callback);
-                                    return;
-                                } else {
-                                    if (typeof callback === 'function') {
-                                        callback(subscription);
-                                    }
-                                }
-                            })
-                            .catch(function (err) {
-                                console.error('Error on getting subscription data');
-                                console.error(err);
-                            });
+                .then(function(serviceWorkerRegistration) {
+                    serviceWorkerRegistration.pushManager.getSubscription()
+                    .then(function(subscription) {
+                        if (!subscription) {
+                            that.subscribeWithoutBackend(callback);
+                            return;
+                        } else {
+                            if (typeof callback === 'function') {
+                                callback(subscription);
+                            }
+                        }
+                    })
+                    .catch(function(err) {
+                        console.error('Error on getting subscription data');
+                        console.error(err);
                     });
+                });
             }
-        } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari)) {
+        } else if (that.Provider === "Safari" || ('safari' in window && 'pushNotification' in window.safari) ) {
             var permissionData = window.safari.pushNotification.permission(that.akPushConfig.SafariWebsitePushID);
             that.checkSafariRemotePermission(permissionData, {}, {}, "", {}, callback);
         } else {
             console.error("The browser is not supported")
         }
-    };
+    }
 
-    this.checkingSubscription = function (callback) {
+    this.checkingSubscription = function(callback) {
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             that._checkingSubscription(callback);
         } else {
-            window.addEventListener('load', function () {
+            window.addEventListener('load', function() {
                 akPush._checkingSubscription(callback);
             });
         }
     };
 
-    this._initSubscription = function (match, update, customData) {
+     this._initSubscription = function (match, update, customData) {
         if (that.Provider === "Chrome" || that.Provider === "Firefox") {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
@@ -650,15 +633,14 @@ var AKPush = function (akPushConfig) {
             });
         } else {
             console.error("The browser is not supported")
-        }
     }
 
     // Use this!
-    this.initSubscription = function (match, update, customData) {
+    this.initSubscription = function(match, update, customData) {
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             that._initSubscription(match, update, customData);
         } else {
-            window.addEventListener('load', function () {
+            window.addEventListener('load', function() {
                 akPush._initSubscription(match, update, customData);
             });
         }
@@ -670,7 +652,9 @@ var AKPush = function (akPushConfig) {
             this.Provider = browser.name;
         }
     }
+ };
 };
+
 // Usage
 // try {
 //     var akPush = new AKPush()
