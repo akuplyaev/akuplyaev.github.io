@@ -1,17 +1,17 @@
 importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-messaging.js');
 
-var isFirebase = false || false;
+var isFirebase = true || false;
 
 
 if (isFirebase){
         var config = {
-        apiKey: "" ,
-        authDomain:".firebaseapp.com",
-        databaseURL: "https://.firebaseio.com",
-        projectId: "",
-        storageBucket: ".appspot.com",
-        messagingSenderId: "" 
+        apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w" ,
+        authDomain:"testfirefoxpush.firebaseapp.com",
+        databaseURL: "https://testfirefoxpush.firebaseio.com",
+        projectId: "testfirefoxpush",
+        storageBucket: "testfirefoxpush.appspot.com",
+        messagingSenderId: "677094341418" 
         };
         firebase.initializeApp(config);
         const messaging = firebase.messaging();
