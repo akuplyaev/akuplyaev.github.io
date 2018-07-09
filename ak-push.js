@@ -35,7 +35,6 @@ var AKPush = function(akPushConfig) {
     	};
     	firebase.initializeApp(fierebaseConfig);
     	var currenToken = localStorage.getItem("current_token");
-    	const messaging = firebase.messaging();
    }
     
     
@@ -479,7 +478,7 @@ var AKPush = function(akPushConfig) {
     
     // Only for Firefox, Chrome, Opera firebase 
     this.initialiseFirebasePush = function (match, update, customData) {
-        messaging.requestPermission()
+         firebase.messaging().requestPermission()
             .then(
                 function () {
                     console.log("Have permission.");
@@ -504,7 +503,7 @@ var AKPush = function(akPushConfig) {
                     console.log(err);
                 }
             );
-        messaging.onMessage(
+         firebase.messaging().onMessage(
             function (payload) {
                 console.log("On message app: ", payload);
                 var title = payload.notification.title;
@@ -629,7 +628,7 @@ var AKPush = function(akPushConfig) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
                     .then(function (serviceWorkerRegistration) {
                         if (that.akPushConfig.IsWebFirebase) {
-                            messaging.useServiceWorker(serviceWorkerRegistration);
+                             firebase.messaging().useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
                         } else {
                             that.initialiseState(match, update, customData);
@@ -641,7 +640,7 @@ var AKPush = function(akPushConfig) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
                     .then(function (serviceWorkerRegistration) {
                         if (that.akPushConfig.IsWebFirebase) {
-                            messaging.useServiceWorker(serviceWorkerRegistration);
+                            firebase.messaging().useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
                         }
                     });
