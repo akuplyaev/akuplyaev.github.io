@@ -23,19 +23,22 @@ var AKPush = function(akPushConfig) {
 
     var that = this;
     
-     var fierebaseConfig = {
+    
+    if (this.akPushConfig.IsWebFirebase){
+    	var fierebaseConfig = {
         apiKey: "" ,
     	authDomain:".firebaseapp.com",
     	databaseURL: "https://.firebaseio.com",
     	projectId: "",
     	storageBucket: ".appspot.com",
     	messagingSenderId: "" 
-    };
-    firebase.initializeApp(fierebaseConfig);
-    var currenToken = localStorage.getItem("current_token");
-    const messaging = firebase.messaging();
+    	};
+    	firebase.initializeApp(fierebaseConfig);
+    	var currenToken = localStorage.getItem("current_token");
+    	const messaging = firebase.messaging();
+   }
     
-
+    
     this.detectBrowserVersion = function(userAgent, regexp) {
         var browserVersionSlice = userAgent.match(regexp);
         var browserVersion = "";
