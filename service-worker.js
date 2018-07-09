@@ -1,7 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-messaging.js');
 
-var isFirebase = false || "fasle";
+var isFirebase = false || false;
 
 
 self.addEventListener('install', function (event) {
@@ -35,7 +35,7 @@ if (isFirebase) {
             return self.registration.showNotification(title, options);
         }
     );
-};
+}
 
 
 if (!isFirebase) {
