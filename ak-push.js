@@ -627,6 +627,7 @@ var AKPush = function(akPushConfig) {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
                     .then(function (serviceWorkerRegistration) {
+                    	serviceWorkerRegistration.update();
                         if (that.akPushConfig.IsWebFirebase) {
                              firebase.messaging().useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
@@ -639,6 +640,7 @@ var AKPush = function(akPushConfig) {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register(that.akPushConfig.ServiceWorkerPath)
                     .then(function (serviceWorkerRegistration) {
+                    serviceWorkerRegistration.update();
                         if (that.akPushConfig.IsWebFirebase) {
                             firebase.messaging().useServiceWorker(serviceWorkerRegistration);
                             that.initialiseFirebasePush(match, update, customData);
