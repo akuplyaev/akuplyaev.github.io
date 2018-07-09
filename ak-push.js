@@ -17,19 +17,19 @@ var AKPush = function(akPushConfig) {
     this.akPushConfig.ServerApplePushAPI = this.akPushConfig.ServerApplePushAPI || 'https://kuplyaev.local/api/v1.1/ap';
     this.akPushConfig.ServiceWorkerPath = this.akPushConfig.ServiceWorkerPath || '/service-worker.js';
     this.akPushConfig.IsTest = this.akPushConfig.IsTest || "false";
-    this.akPushConfig.IsWebFirebase = this.akPushConfig.IsWebFirebase || "true";
+    this.akPushConfig.IsWebFirebase = this.akPushConfig.IsWebFirebase || "false";
 
     this.Provider = "";
 
     var that = this;
     
      var fierebaseConfig = {
-        apiKey: "AIzaSyAZM-FlQNjcyHlRdnaK6gvpogs7JyhTR2w" ,
-    	authDomain:"testfirefoxpush.firebaseapp.com",
-    	databaseURL: "https://testfirefoxpush.firebaseio.com",
-    	projectId: "testfirefoxpush",
-    	storageBucket: "testfirefoxpush.appspot.com",
-    	messagingSenderId: "677094341418" 
+        apiKey: "" ,
+    	authDomain:".firebaseapp.com",
+    	databaseURL: "https://.firebaseio.com",
+    	projectId: "",
+    	storageBucket: ".appspot.com",
+    	messagingSenderId: "" 
     };
     firebase.initializeApp(fierebaseConfig);
     var currenToken = localStorage.getItem("current_token");
