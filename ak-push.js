@@ -483,11 +483,11 @@ var AKPush = function (akPushConfig) {
 
     // Only for Firefox, Chrome, Opera firebase 
     this.initialiseFirebasePush = function (match, update, customData) {
-        messaging.requestPermission()
+        firebase.messaging().requestPermission()
             .then(
                 function () {
                     console.log("Have permission.");
-                    return messaging.getToken();
+                    return  firebase.messaging().getToken();
                 }
             )
             .then(
@@ -508,7 +508,7 @@ var AKPush = function (akPushConfig) {
                     console.log(err);
                 }
             );
-        messaging.onMessage(
+            firebase.messaging().onMessage(
             function (payload) {
                 console.log("On message app: ", payload);
                 var title = payload.notification.title;
