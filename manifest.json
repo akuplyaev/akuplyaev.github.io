@@ -1,4 +1,5 @@
 {
   "name": "https://akuplyaev.github.io",
-  "display": "standalone"
+  "display": "standalone",
+  "gcm_sender_id": ""
 }
